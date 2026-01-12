@@ -59,20 +59,20 @@ CREATE DATABASE grader_db;
 
 ### 5. Создать .env файл
 
-Скопировать содержимое из примера выше или использовать:
-```env
+```
+PGCLIENTENCODING=UTF8
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=grader_db
 DB_USER=postgres
-DB_PASSWORD=12345
+DB_PASSWORD=---
 
-EMAIL_ENABLED=true
-SMTP_SERVER=smtp.gmail.com
-SMTP_PORT=587
-SENDER_EMAIL=your_email@gmail.com
-SENDER_PASSWORD=your_app_password
-RECIPIENT_EMAIL=recipient@gmail.com
+GSHEETS_ENABLED=true
+GSHEETS_CREDENTIALS_FILE=credentials.json
+GSHEETS_SPREADSHEET_NAME=Grader Statistics
+
+START_DATE=2023-05-31 00:00:00.000000
+END_DATE=2023-05-31 23:59:59.999999
 ```
 
 ## Запуск
@@ -99,24 +99,6 @@ CREATE TABLE grader_attempts (
 
 Логи сохраняются в папку `logs/` с именем `etl_YYYY-MM-DD.log`. Автоматически удаляются логи старше 3 дней.
 
-## Автоматизация
-
-### Windows (Task Scheduler)
-
-1. Открыть Task Scheduler
-2. Create Basic Task
-3. Trigger: Daily, время 02:00
-4. Action: Start a program
-   - Program: `C:\path\to\venv\Scripts\python.exe`
-   - Arguments: `etl_script.py`
-   - Start in: `C:\path\to\grader_etl`
-
-### Linux (cron)
-```bash
-crontab -e
-
-# Добавить строку (запуск каждый день в 02:00)
-0 2 * * * cd /path/to/grader_etl && /path/to/venv/bin/python etl_script.py
 ```
 
 ## Проверка работы
@@ -165,7 +147,3 @@ sudo systemctl status postgresql
 - Убедиться, что включены оба API (Sheets и Drive)
 - Проверить, что credentials.json в корне проекта
 - Поделиться таблицей с service account email
-
-## Лицензия
-
-MIT
